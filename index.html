@@ -24,10 +24,10 @@ canvas { background: #eee; display: block; margin: 0 auto; }
 
       const paddleHeight = 10
       const paddleWidth = 75
-      const paddleX = (canvas.width - paddleWidth) / 2
+      let paddleX = (canvas.width - paddleWidth) / 2
 
-      const rightPressed = false
-      const leftPressed = false
+      let rightPressed = false
+      let leftPressed = false
 
       function drawBall() {
         ctx.beginPath()
@@ -48,6 +48,7 @@ canvas { background: #eee; display: block; margin: 0 auto; }
       function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
         drawBall()
+        drawPaddle()
 
         if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
           dx = -dx
@@ -58,6 +59,13 @@ canvas { background: #eee; display: block; margin: 0 auto; }
 
         x += dx
         y += dy
+
+        if (rightPressed && paddleX < canvas.width - paddleWidth) {
+          paddleX += 7
+        }
+        if (leftPressed && paddleX > 0) {
+          paddleX -= 7
+        }
       }
 
       document.addEventListener('keydown', keydownHandler, false)
@@ -72,7 +80,7 @@ canvas { background: #eee; display: block; margin: 0 auto; }
         }
       }
 
-      function keydownHandler(e) {
+      function keyupHandler(e) {
         if (e.key === 'Right' || e.key === 'ArrowRight') {
           rightPressed = false
         }
