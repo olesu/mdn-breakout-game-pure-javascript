@@ -40,6 +40,7 @@ canvas { background: #eee; display: block; margin: 0 auto; }
       const bricks = []
 
       let score = 0
+      let lives = 3
 
       for (let c = 0; c < brickColumnCount; c++) {
         bricks[c] = []
@@ -88,6 +89,7 @@ canvas { background: #eee; display: block; margin: 0 auto; }
         drawBall()
         drawPaddle()
         drawScore()
+        drawLives()
 
         collisionDetection()
 
@@ -102,8 +104,19 @@ canvas { background: #eee; display: block; margin: 0 auto; }
             dy = -dy
           }
           else {
-            alert('GAME OVER')
-            document.location.reload()
+            lives--
+
+            if (!lives) {
+              alert('GAME OVER')
+              document.location.reload()
+            }
+            else {
+              x = canvas.width / 2
+              y = canvas.height - 30
+              dx = 2
+              dy = -2
+              paddleX = (canvas.width - paddleWidth) / 2
+            }
           }
         }
 
@@ -116,6 +129,8 @@ canvas { background: #eee; display: block; margin: 0 auto; }
         if (leftPressed && paddleX > 0) {
           paddleX -= 7
         }
+
+        requestAnimationFrame(draw)
       }
 
       document.addEventListener('keydown', keydownHandler, false)
@@ -159,7 +174,6 @@ canvas { background: #eee; display: block; margin: 0 auto; }
                 if (score === brickRowCount * brickColumnCount) {
                   alert('YOU WIN, CONGRATULATIONS!')
                   document.location.reload()
-                  clearInterval(interval) // Needed for Chrome to end game
                 }
               }
             }
@@ -173,7 +187,13 @@ canvas { background: #eee; display: block; margin: 0 auto; }
         ctx.fillText(`Score: ${score}`, 8, 20)
       }
 
-      const interval = setInterval(draw, 10)
+      function drawLives() {
+        ctx.font = '16px Arial'
+        ctx.fillStyle = '#0095dd'
+        ctx.fillText(`Lives: ${lives}`, canvas.width - 65, 20)
+      }
+
+      draw()
 
     </script>
   </body>
